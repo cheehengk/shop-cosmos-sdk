@@ -17,6 +17,11 @@ func (k Keeper) ListPost(ctx context.Context, req *types.QueryListPostRequest) (
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+	var StartDate uint64 = req.StartDate
+	var EndDate uint64 = req.EndDate
+	var MinPrice uint64 = req.MinPrice
+	var MaxPrice uint64 = req.MaxPrice
+
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PostKey))
 
@@ -27,12 +32,19 @@ func (k Keeper) ListPost(ctx context.Context, req *types.QueryListPostRequest) (
 			return err
 		}
 
-		posts = append(posts, post)
+		if k.isInFilterRange(post, StartDate, EndDate, MinPrice, MaxPrice) {
+			posts = append(posts, post)
+		}
+
 		return nil
 	})
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	pageRes = &query.PageResponse{
+		Total: uint64(len(posts)),
 	}
 
 	return &types.QueryListPostResponse{Post: posts, Pagination: pageRes}, nil

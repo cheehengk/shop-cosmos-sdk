@@ -69,3 +69,10 @@ func (k Keeper) RemovePost(ctx sdk.Context, id uint64) {
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PostKey))
 	store.Delete(GetPostIDBytes(id))
 }
+
+func (k Keeper) isInFilterRange(post types.Post, startDate uint64, endDate uint64, minPrice uint64, maxPrice uint64) bool {
+	dateInRange := (startDate == 0 || startDate <= post.Date) && (endDate == 0 || post.Date <= endDate)
+	priceInRange := (minPrice == 0 || minPrice <= post.Price) && (maxPrice == 0 || post.Price <= maxPrice)
+
+	return dateInRange && priceInRange
+}
