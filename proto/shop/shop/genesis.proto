@@ -1,0 +1,17 @@
+syntax = "proto3";
+package shop.shop;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "shop/shop/params.proto";
+
+option go_package = "shop/x/shop/types";
+
+// GenesisState defines the shop module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
