@@ -1,5 +1,6 @@
-# shop
-**shop** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
+# Shop
+**Shop** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
+For switcheo internship coding challenge.
 
 ## Get started
 

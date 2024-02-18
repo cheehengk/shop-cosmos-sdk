@@ -19262,6 +19262,343 @@ paths:
               parameters.
       tags:
         - Msg
+  /shop/shop/list_post/{startDate}/{endDate}/{minPrice}/{maxPrice}:
+    get:
+      summary: Queries a list of ListPost items.
+      operationId: ShopShopQuery_ListPost
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              post:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    seller:
+                      type: string
+                    price:
+                      type: string
+                      format: uint64
+                    date:
+                      type: string
+                      format: uint64
+                    id:
+                      type: string
+                      format: uint64
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: startDate
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: endDate
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: minPrice
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: maxPrice
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /shop/shop/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: ShopShopQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /shop/shop/show_post/{id}:
+    get:
+      summary: Queries a list of ShowPost items.
+      operationId: ShopShopQuery_ShowPost
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              post:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  seller:
+                    type: string
+                  price:
+                    type: string
+                    format: uint64
+                  date:
+                    type: string
+                    format: uint64
+                  id:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
+  /shop.shop.Msg/CreatePost:
+    post:
+      operationId: ShopShopMsg_CreatePost
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creator:
+                type: string
+              title:
+                type: string
+              description:
+                type: string
+              price:
+                type: string
+                format: uint64
+      tags:
+        - Msg
+  /shop.shop.Msg/DeletePost:
+    post:
+      operationId: ShopShopMsg_DeletePost
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creator:
+                type: string
+              id:
+                type: string
+                format: uint64
+      tags:
+        - Msg
   /shop.shop.Msg/UpdateParams:
     post:
       summary: |-
@@ -19310,12 +19647,60 @@ paths:
                   authority is the address that controls the module (defaults to
                   x/gov unless overwritten).
               params:
-                description: |-
-                  params defines the module parameters to update.
-
-                  NOTE: All parameters must be supplied.
+                description: 'NOTE: All parameters must be supplied.'
                 type: object
             description: MsgUpdateParams is the Msg/UpdateParams request type.
+      tags:
+        - Msg
+  /shop.shop.Msg/UpdatePost:
+    post:
+      operationId: ShopShopMsg_UpdatePost
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creator:
+                type: string
+              title:
+                type: string
+              description:
+                type: string
+              price:
+                type: string
+                format: uint64
+              id:
+                type: string
+                format: uint64
       tags:
         - Msg
 definitions:
@@ -27058,6 +27443,213 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  cosmos.base.query.v1beta1.PageRequest:
+    type: object
+    properties:
+      key:
+        type: string
+        format: byte
+        description: |-
+          key is a value returned in PageResponse.next_key to begin
+          querying the next page most efficiently. Only one of offset or key
+          should be set.
+      offset:
+        type: string
+        format: uint64
+        description: |-
+          offset is a numeric offset that can be used when key is unavailable.
+          It is less efficient than using key. Only one of offset or key should
+          be set.
+      limit:
+        type: string
+        format: uint64
+        description: >-
+          limit is the total number of results to be returned in the result
+          page.
+
+          If left empty it will default to a value to be set by each app.
+      count_total:
+        type: boolean
+        description: >-
+          count_total is set to true  to indicate that the result set should
+          include
+
+          a count of the total number of items available for pagination in UIs.
+
+          count_total is only respected when offset is used. It is ignored when
+          key
+
+          is set.
+      reverse:
+        type: boolean
+        description: >-
+          reverse is set to true if results are to be returned in the descending
+          order.
+
+
+          Since: cosmos-sdk 0.43
+    description: |-
+      message SomeRequest {
+               Foo some_parameter = 1;
+               PageRequest pagination = 2;
+       }
+    title: |-
+      PageRequest is to be embedded in gRPC request messages for efficient
+      pagination. Ex:
+  cosmos.base.query.v1beta1.PageResponse:
+    type: object
+    properties:
+      next_key:
+        type: string
+        format: byte
+        description: |-
+          next_key is the key to be passed to PageRequest.key to
+          query the next page most efficiently. It will be empty if
+          there are no more results.
+      total:
+        type: string
+        format: uint64
+        title: |-
+          total is total number of results available if PageRequest.count_total
+          was set, its value is undefined otherwise
+    description: |-
+      PageResponse is to be embedded in gRPC response messages where the
+      corresponding request message has used PageRequest.
+
+       message SomeResponse {
+               repeated Bar results = 1;
+               PageResponse page = 2;
+       }
+  shop.shop.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  shop.shop.Post:
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      seller:
+        type: string
+      price:
+        type: string
+        format: uint64
+      date:
+        type: string
+        format: uint64
+      id:
+        type: string
+        format: uint64
+  shop.shop.QueryListPostResponse:
+    type: object
+    properties:
+      post:
+        type: array
+        items:
+          type: object
+          properties:
+            title:
+              type: string
+            description:
+              type: string
+            seller:
+              type: string
+            price:
+              type: string
+              format: uint64
+            date:
+              type: string
+              format: uint64
+            id:
+              type: string
+              format: uint64
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  shop.shop.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  shop.shop.QueryShowPostResponse:
+    type: object
+    properties:
+      post:
+        type: object
+        properties:
+          title:
+            type: string
+          description:
+            type: string
+          seller:
+            type: string
+          price:
+            type: string
+            format: uint64
+          date:
+            type: string
+            format: uint64
+          id:
+            type: string
+            format: uint64
+  shop.shop.MsgCreatePost:
+    type: object
+    properties:
+      creator:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      price:
+        type: string
+        format: uint64
+  shop.shop.MsgCreatePostResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+  shop.shop.MsgDeletePost:
+    type: object
+    properties:
+      creator:
+        type: string
+      id:
+        type: string
+        format: uint64
+  shop.shop.MsgDeletePostResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
   shop.shop.MsgUpdateParams:
     type: object
     properties:
@@ -27067,10 +27659,7 @@ definitions:
           authority is the address that controls the module (defaults to x/gov
           unless overwritten).
       params:
-        description: |-
-          params defines the module parameters to update.
-
-          NOTE: All parameters must be supplied.
+        description: 'NOTE: All parameters must be supplied.'
         type: object
     description: MsgUpdateParams is the Msg/UpdateParams request type.
   shop.shop.MsgUpdateParamsResponse:
@@ -27078,6 +27667,24 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  shop.shop.Params:
+  shop.shop.MsgUpdatePost:
     type: object
-    description: Params defines the parameters for the module.
+    properties:
+      creator:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      price:
+        type: string
+        format: uint64
+      id:
+        type: string
+        format: uint64
+  shop.shop.MsgUpdatePostResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
