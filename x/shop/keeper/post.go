@@ -76,3 +76,7 @@ func (k Keeper) isInFilterRange(post types.Post, startDate uint64, endDate uint6
 
 	return dateInRange && priceInRange
 }
+
+func (k Keeper) matchStatus(status string) bool {
+	return status == "Available" || status == "Reserved" || status == "Sold"
+}

@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName = "/shop.shop.Msg/UpdateParams"
-	Msg_CreatePost_FullMethodName   = "/shop.shop.Msg/CreatePost"
-	Msg_UpdatePost_FullMethodName   = "/shop.shop.Msg/UpdatePost"
-	Msg_DeletePost_FullMethodName   = "/shop.shop.Msg/DeletePost"
+	Msg_UpdateParams_FullMethodName     = "/shop.shop.Msg/UpdateParams"
+	Msg_CreatePost_FullMethodName       = "/shop.shop.Msg/CreatePost"
+	Msg_UpdatePost_FullMethodName       = "/shop.shop.Msg/UpdatePost"
+	Msg_DeletePost_FullMethodName       = "/shop.shop.Msg/DeletePost"
+	Msg_ChangePostStatus_FullMethodName = "/shop.shop.Msg/ChangePostStatus"
 )
 
 // MsgClient is the client API for Msg service.
@@ -35,6 +36,7 @@ type MsgClient interface {
 	CreatePost(ctx context.Context, in *MsgCreatePost, opts ...grpc.CallOption) (*MsgCreatePostResponse, error)
 	UpdatePost(ctx context.Context, in *MsgUpdatePost, opts ...grpc.CallOption) (*MsgUpdatePostResponse, error)
 	DeletePost(ctx context.Context, in *MsgDeletePost, opts ...grpc.CallOption) (*MsgDeletePostResponse, error)
+	ChangePostStatus(ctx context.Context, in *MsgChangePostStatus, opts ...grpc.CallOption) (*MsgChangePostStatusResponse, error)
 }
 
 type msgClient struct {
@@ -81,6 +83,15 @@ func (c *msgClient) DeletePost(ctx context.Context, in *MsgDeletePost, opts ...g
 	return out, nil
 }
 
+func (c *msgClient) ChangePostStatus(ctx context.Context, in *MsgChangePostStatus, opts ...grpc.CallOption) (*MsgChangePostStatusResponse, error) {
+	out := new(MsgChangePostStatusResponse)
+	err := c.cc.Invoke(ctx, Msg_ChangePostStatus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -91,6 +102,7 @@ type MsgServer interface {
 	CreatePost(context.Context, *MsgCreatePost) (*MsgCreatePostResponse, error)
 	UpdatePost(context.Context, *MsgUpdatePost) (*MsgUpdatePostResponse, error)
 	DeletePost(context.Context, *MsgDeletePost) (*MsgDeletePostResponse, error)
+	ChangePostStatus(context.Context, *MsgChangePostStatus) (*MsgChangePostStatusResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -109,6 +121,9 @@ func (UnimplementedMsgServer) UpdatePost(context.Context, *MsgUpdatePost) (*MsgU
 }
 func (UnimplementedMsgServer) DeletePost(context.Context, *MsgDeletePost) (*MsgDeletePostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePost not implemented")
+}
+func (UnimplementedMsgServer) ChangePostStatus(context.Context, *MsgChangePostStatus) (*MsgChangePostStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangePostStatus not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -195,6 +210,24 @@ func _Msg_DeletePost_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ChangePostStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgChangePostStatus)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ChangePostStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ChangePostStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ChangePostStatus(ctx, req.(*MsgChangePostStatus))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -217,6 +250,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeletePost",
 			Handler:    _Msg_DeletePost_Handler,
+		},
+		{
+			MethodName: "ChangePostStatus",
+			Handler:    _Msg_ChangePostStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

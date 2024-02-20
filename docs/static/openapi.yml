@@ -19292,6 +19292,8 @@ paths:
                     id:
                       type: string
                       format: uint64
+                    status:
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -19481,6 +19483,8 @@ paths:
                   id:
                     type: string
                     format: uint64
+                  status:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -19507,6 +19511,52 @@ paths:
           format: uint64
       tags:
         - Query
+  /shop.shop.Msg/ChangePostStatus:
+    post:
+      operationId: ShopShopMsg_ChangePostStatus
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creator:
+                type: string
+              id:
+                type: string
+                format: uint64
+              status:
+                type: string
+      tags:
+        - Msg
   /shop.shop.Msg/CreatePost:
     post:
       operationId: ShopShopMsg_CreatePost
@@ -27541,6 +27591,8 @@ definitions:
       id:
         type: string
         format: uint64
+      status:
+        type: string
   shop.shop.QueryListPostResponse:
     type: object
     properties:
@@ -27564,6 +27616,8 @@ definitions:
             id:
               type: string
               format: uint64
+            status:
+              type: string
       pagination:
         type: object
         properties:
@@ -27618,6 +27672,24 @@ definitions:
           id:
             type: string
             format: uint64
+          status:
+            type: string
+  shop.shop.MsgChangePostStatus:
+    type: object
+    properties:
+      creator:
+        type: string
+      id:
+        type: string
+        format: uint64
+      status:
+        type: string
+  shop.shop.MsgChangePostStatusResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
   shop.shop.MsgCreatePost:
     type: object
     properties:

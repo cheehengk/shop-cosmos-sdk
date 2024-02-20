@@ -18,6 +18,7 @@ func (k msgServer) CreatePost(goCtx context.Context, msg *types.MsgCreatePost) (
 		Seller:      msg.Creator,
 		Price:       msg.Price,
 		Date:        uint64(time.Now().Unix()),
+		Status:      "Available",
 	}
 	id := k.AppendPost(
 		ctx,
