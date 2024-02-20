@@ -49,14 +49,11 @@ Example:
 ```shopd q shop show-post 4 --chain-id shop```
 
 ### Update Post
-shopd tx shop update-post {title} {description} {price} {post_id} {status} --from {account} --chain-id shop
-
-*Note: status is either "Available", "Reserved", or "Sold". If invalid status is provided, it will default to 
-current status.*
+shopd tx shop update-post {title} {description} {price} {post_id} --from {account} --chain-id shop
 
 Example: 
 
-```shopd tx shop update-post new-title new-description 200 4 Sold --from Alice --chain-id shop```
+```shopd tx shop update-post new-title new-description 200 4 --from Alice --chain-id shop```
 
 ### Delete Post
 shopd tx shop delete-post {post_id} --from {account} --chain-id shop
