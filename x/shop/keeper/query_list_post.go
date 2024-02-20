@@ -2,9 +2,10 @@ package keeper
 
 import (
 	"context"
-
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/store/prefix"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"shop/x/shop/types"
@@ -22,6 +23,13 @@ func (k Keeper) ListPost(ctx context.Context, req *types.QueryListPostRequest) (
 	var EndDate uint64 = req.EndDate
 	var MinPrice uint64 = req.MinPrice
 	var MaxPrice uint64 = req.MaxPrice
+
+	if MaxPrice < MinPrice && MaxPrice != 0 {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "max price cannot be less than min price")
+	}
+	if EndDate < StartDate && EndDate != 0 {
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "end date cannot be less than start date")
+	}
 
 	storeAdapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
 	store := prefix.NewStore(storeAdapter, types.KeyPrefix(types.PostKey))
